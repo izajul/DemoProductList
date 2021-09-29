@@ -4,6 +4,9 @@ import com.criddam.doctor.demoproductslist.Network.APIService;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import java.time.Duration;
+import java.util.concurrent.TimeUnit;
+
 import dagger.Module;
 import dagger.Provides;
 import okhttp3.OkHttpClient;
@@ -20,7 +23,10 @@ public abstract class RetroModule {
 
     @Provides
     static OkHttpClient provideOkHttpClient(){
-        return new OkHttpClient.Builder().build();
+        return new OkHttpClient
+                .Builder()
+                .readTimeout(60, TimeUnit.SECONDS)
+                .build();
     }
 
     @Provides
