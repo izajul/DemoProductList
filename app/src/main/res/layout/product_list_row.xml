@@ -4,19 +4,21 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_margin="10dp"
-    android:layout_height="wrap_content">
+    android:layout_margin="5dp"
+    android:layout_height="wrap_content"
+    android:padding="10dp"
+    android:background="@drawable/border_6_no_bg">
 
 
     <ImageView
         android:id="@+id/img"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:src="@drawable/default_img"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:adjustViewBounds="true"
-        tools:srcCompat="@tools:sample/avatars" />
+        android:adjustViewBounds="true" />
 
     <LinearLayout
         android:layout_marginTop="10dp"
@@ -42,6 +44,18 @@
             android:layout_marginTop="8dp"
             android:text="Full Description" />
     </LinearLayout>
+
+    <ImageView
+        android:id="@+id/favorite_img"
+        android:padding="3dp"
+        android:src="@drawable/ic_baseline_favorite_24"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/gray" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

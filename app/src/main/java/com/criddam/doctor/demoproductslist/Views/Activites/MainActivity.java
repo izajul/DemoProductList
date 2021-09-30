@@ -59,7 +59,6 @@ public class MainActivity extends AppCompatActivity {
 
         mAdapter = new ProductsListAdapter(list);
 
-//        binding.listRC.setLayoutManager(new GridLayoutManager(this,2));
         binding.listRC.setLayoutManager(new GridLayoutManager(this,2));
 
         binding.listRC.setAdapter(mAdapter);

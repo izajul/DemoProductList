@@ -35,8 +35,6 @@ public class ProductsListAdapter extends RecyclerView.Adapter<ProductsListAdapte
         holder.binding.desc.setText(item.getDescription());
         holder.binding.shortDesc.setText(item.getShortName());
 
-
-
         if (item.getFiles()!=null){
             String fileUuid = item.getFiles().get(0).getFileUuid();
             Glide
@@ -49,7 +47,9 @@ public class ProductsListAdapter extends RecyclerView.Adapter<ProductsListAdapte
                     .into(holder.binding.img);
         }
 
-
+        holder.binding.favoriteImg.setOnClickListener( view -> {
+            // TODO: 9/30/2021 :: Store & remove favorite from SQL
+        });
 
     }
 
