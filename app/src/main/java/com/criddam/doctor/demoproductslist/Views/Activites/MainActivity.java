@@ -7,24 +7,16 @@ import androidx.recyclerview.widget.GridLayoutManager;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
-import android.util.Log;
 
-import com.criddam.doctor.demoproductslist.Dagger.Componets.DaggerRetroComponent;
-import com.criddam.doctor.demoproductslist.Dagger.Componets.RetroComponent;
-import com.criddam.doctor.demoproductslist.Models.DataModels.ProductDataModel;
-import com.criddam.doctor.demoproductslist.R;
+import com.criddam.doctor.demoproductslist.Models.DataModels.CompactProduct;
+import com.criddam.doctor.demoproductslist.Models.Utils.ProductsListItemListener;
 import com.criddam.doctor.demoproductslist.ViewModels.ProductViewModel;
 import com.criddam.doctor.demoproductslist.Views.Adapters.ProductsListAdapter;
 import com.criddam.doctor.demoproductslist.databinding.ActivityMainBinding;
-import com.google.gson.Gson;
+
 
 import java.util.ArrayList;
 import java.util.List;
-
-import dagger.BindsInstance;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -35,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
 
     private ProductsListAdapter mAdapter;
-    private List<ProductDataModel> list = new ArrayList();
+    private List<CompactProduct> list = new ArrayList();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,15 +41,33 @@ public class MainActivity extends AppCompatActivity {
         progressDialog.setMessage("Loading...");
         progressDialog.setCancelable(false);
         progressDialog.show();
-        productViewModel.getProductList().observe(this, productDataModels -> {
-            progressDialog.dismiss();
-            list.clear();
-            list.addAll(productDataModels);
-            mAdapter.notifyDataSetChanged();
 
+        productViewModel.getProductList().observe(this, productDataModels -> {
+            productViewModel.productsFromDB().observe(this, products ->{
+               productViewModel.doCompactWithDBData(productDataModels,products);
+            });
+        });
+
+        productViewModel.mCompactProductLiveData.observe(this, compactProducts -> {
+            progressDialog.dismiss();
+                        list.clear();
+            list.addAll(compactProducts);
+            mAdapter.notifyDataSetChanged();
         });
 
         mAdapter = new ProductsListAdapter(list);
+
+        mAdapter.addListener(new ProductsListItemListener() {
+            @Override
+            public void onFavoriteClick(CompactProduct product) {
+                productViewModel.doFavoriteAction(product);
+            }
+
+            @Override
+            public void onItemClick(CompactProduct product) {
+
+            }
+        });
 
         binding.listRC.setLayoutManager(new GridLayoutManager(this,2));
 

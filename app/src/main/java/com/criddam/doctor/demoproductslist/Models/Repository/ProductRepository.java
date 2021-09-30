@@ -12,6 +12,9 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.criddam.doctor.demoproductslist.Dagger.Componets.DaggerRetroComponent;
 import com.criddam.doctor.demoproductslist.Dagger.Componets.RetroComponent;
+import com.criddam.doctor.demoproductslist.DataBase.Product;
+import com.criddam.doctor.demoproductslist.DataBase.ProductDAO;
+import com.criddam.doctor.demoproductslist.DataBase.ProductDB;
 import com.criddam.doctor.demoproductslist.Models.DataModels.ProductDataModel;
 import com.google.gson.Gson;
 
@@ -29,9 +32,13 @@ public class ProductRepository {
 
     private static ProductRepository instance;
 
-    private RetroComponent component;
+    private final RetroComponent component;
 
     private MutableLiveData<List<ProductDataModel>> productsLiveData;
+
+    private static ProductDAO productDAO;
+
+    private static LiveData<List<Product>> liveDBData;
 
     public ProductRepository() {
         component = DaggerRetroComponent.create();
@@ -41,6 +48,9 @@ public class ProductRepository {
         if (instance == null){
             mContext = context;
             instance = new ProductRepository();
+            ProductDB productDB = ProductDB.getInstance(context);
+            productDAO = productDB.productDAO();
+            liveDBData = productDAO.getAllProducts();
         }
         return instance;
     }
@@ -80,6 +90,36 @@ public class ProductRepository {
         });
 
         return productsLiveData;
+    }
+
+    public void insert(Product product){
+        ProductDB.dbExecutor.execute(()->{
+            productDAO.insert(product);
+        });
+    }
+    public void update(Product product){
+        ProductDB.dbExecutor.execute(()->{
+            productDAO.update(product);
+        });
+    }
+
+    public void deleteDBProduct(Product product){
+        ProductDB.dbExecutor.execute(() -> {
+            productDAO.deleteProduct(product);
+        });
+    }
+
+    public void clearDb(){
+        ProductDB.dbExecutor.execute(()->{
+            productDAO.deleteAllProduct();
+        });
+    }
+    public LiveData<Product> isProductInFavorite(String uuId){
+        return productDAO.getProductByUuId(uuId) ;
+    }
+
+    public LiveData<List<Product>> getDBProductsLiveData(){
+        return liveDBData;
     }
 
 }
