@@ -7,7 +7,7 @@ android {
     buildToolsVersion "30.0.3"
 
     defaultConfig {
-        applicationId "com.criddam.doctor.demoproductslist"
+        applicationId "com.demo.product.demoproductslist"
         minSdkVersion 23
         targetSdkVersion 30
         versionCode 1
